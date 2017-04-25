@@ -1,0 +1,17 @@
+{
+  "name": "youino_f-js-td1",
+  "version": "1.0.0",
+  "main": "app/index.js",
+  "author": "Florent Youinou",
+  "license": "MIT",
+  "scripts": {
+    "start": "node app/index.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "bulma": "^0.4.0",
+    "express": "^4.15.2",
+    "express-minify": "^0.2.0",
+    "font-awesome": "^4.7.0"
+  }
+}
