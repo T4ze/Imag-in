@@ -30,7 +30,7 @@ app.post("/api/pictures", (req, res) => {
       "latitude": req.body.latitude,
       "longitude": req.body.longitude,
       "tags": req.body.tags
-    })
+    });
     res.status(200).end();
 });
 
