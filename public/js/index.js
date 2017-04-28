@@ -1,4 +1,4 @@
-var startIndex = 0;
+let startIndex = 0;
 function getMorePics() { 
     fetch('http://localhost:4242/api/pictures?index=' + startIndex)
     .then((r) => r.json())
@@ -6,11 +6,11 @@ function getMorePics() {
         if (!data.length) return;
 
         startIndex = data.slice(-1).pop().index;
-        var docfrag = document.createDocumentFragment();
+        let docfrag = document.createDocumentFragment();
         data.forEach((o) => {
-            var d = document.createElement("div");
+            let d = document.createElement("div");
             d.className = "column is-2 element";
-            var x = document.createElement("IMG");
+            let x = document.createElement("IMG");
             x.name = o.caption;
             x.src = o.picture + "?" + o.id;
             d.onclick =  function () {
@@ -32,8 +32,8 @@ function update() {
 }
 
 function sendForm() {
-    var body = {};
-    var inputs = document.getElementsByClassName("inputs");
+    let body = {};
+    const inputs = document.getElementsByClassName("inputs");
     [].forEach.call(inputs, (e) => body[e.name] = e.value);
 
     fetch('http://localhost:4242/api/pictures', {
