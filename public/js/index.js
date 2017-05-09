@@ -1,11 +1,13 @@
 let startIndex = 0;
+let canGetMore = true;
 function getMorePics() { 
-    fetch('http://localhost:4242/api/pictures?index=' + startIndex)
+    canGetMore = false;
+    fetch('http://localhost:4242/api/pictures?cursor=' + startIndex + '&amount=50')
     .then((r) => r.json())
     .then((data) => {
         if (!data.length) return;
 
-        startIndex = data.slice(-1).pop().index;
+        startIndex = data.slice(-1).pop().index + 1;
         let docfrag = document.createDocumentFragment();
         data.forEach((o) => {
             let d = document.createElement("div");
@@ -20,11 +22,12 @@ function getMorePics() {
             docfrag.appendChild(d);
         })
         document.getElementById('elements').appendChild(docfrag);
+        canGetMore = true;
     }).catch((ex) => console.log('failed', ex))
 }
 
 function update() {
-    if (document.body.scrollHeight == 
+    if (canGetMore && document.body.scrollHeight <=
             document.body.scrollTop + window.innerHeight) {
         getMorePics();
     }

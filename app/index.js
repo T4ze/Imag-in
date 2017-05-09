@@ -10,10 +10,13 @@ app.use(minify());
 app.use(Express.static('public'));
 
 app.get("/api/pictures", (req, res) => {
-    let index = parseInt(req.query.index) || 0;
-    let count = parseInt(req.query.count) || 20;
+    let cursor = parseInt(req.query.cursor) || 0;
+    let amount = parseInt(req.query.amount) || 20;
 
-    res.json(images.slice(index, index + count));
+    if (cursor >= images.length) {
+        return res.status(404).end();
+    }
+    res.json(images.slice(cursor, cursor + amount));
 });
 
 app.post("/api/pictures", (req, res) => {
