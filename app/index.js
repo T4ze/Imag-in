@@ -1,4 +1,5 @@
 const Express = require("express");
+var request = require('request');
 const app = Express();
 const bodyParser = require('body-parser');
 const minify = require('express-minify');
@@ -25,23 +26,48 @@ app.post("/api/pictures", (req, res) => {
       return;
     }
 
-    images.push({
-      "id": generateUUID(),
-      "index": images.length,
-      "picture": req.body.picture,
-      "caption": req.body.caption,
-      "latitude": req.body.latitude,
-      "longitude": req.body.longitude,
-      "tags": []
+
+    var url = req.body.picture;
+    var magic = {
+        jpg: 'ffd8ffe0',
+        png: '89504e47',
+        gif: '47494638'
+    };
+    var options = {
+        method: 'GET',
+        url: url,
+        encoding: null
+    };
+
+    request(options, function (err, response, body) {
+        if(!err && response.statusCode == 200){
+            var magigNumberInBody = body.toString('hex',0,4);
+            if (magigNumberInBody == magic.jpg ||
+                magigNumberInBody == magic.png ||
+                magigNumberInBody == magic.gif) {
+
+                images.push({
+                    "id": generateUUID(),
+                    "index": images.length,
+                    "picture": req.body.picture,
+                    "caption": req.body.caption,
+                    "latitude": req.body.latitude,
+                    "longitude": req.body.longitude,
+                    "tags": []
+                });
+                res.status(200).end();
+            }
+        } else {
+            res.status(500).end();
+        }
     });
-    res.status(200).end();
 });
 
 app.delete("/api/pictures/:id", (req, res) => {
     if (!req.params.id)
       res.status(404).end();
 
-    images = images.filter(o => o.id != req.body.id);
+    images = images.filter(o => o.id != req.params.id);
     res.status(200).end();
 });
 
