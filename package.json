@@ -5,7 +5,7 @@
   "author": "Florent Youinou",
   "license": "MIT",
   "scripts": {
-    "start": "node app/index.js"
+    "start": "nodemon app/index.js"
   },
   "dependencies": {
     "body-parser": "^1.17.1",
@@ -13,6 +13,7 @@
     "express": "^4.15.2",
     "express-minify": "^0.2.0",
     "font-awesome": "^4.7.0",
+    "nodemon": "^1.11.0",
     "request": "^2.81.0"
   }
 }

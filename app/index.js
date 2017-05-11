@@ -4,6 +4,12 @@ const app = Express();
 const bodyParser = require('body-parser');
 const minify = require('express-minify');
 
+const magic = {
+    jpg: 'ffd8ffe0',
+    png: '89504e47',
+    gif: '47494638'
+};
+
 let images = require('../data/1500-random-images.json');
 
 app.use(bodyParser.json());
@@ -14,10 +20,11 @@ app.get("/api/pictures", (req, res) => {
     let cursor = parseInt(req.query.cursor) || 0;
     let amount = parseInt(req.query.amount) || 20;
 
-    if (cursor >= images.length) {
+    let arr = images.filter((im) => im.index >= cursor);
+    if (!arr.length) {
         return res.status(404).end();
     }
-    res.json(images.slice(cursor, cursor + amount));
+    res.json(arr.slice(0, amount));
 });
 
 app.post("/api/pictures", (req, res) => {
@@ -26,40 +33,36 @@ app.post("/api/pictures", (req, res) => {
       return;
     }
 
-
-    var url = req.body.picture;
-    var magic = {
-        jpg: 'ffd8ffe0',
-        png: '89504e47',
-        gif: '47494638'
-    };
-    var options = {
+    let options = {
         method: 'GET',
-        url: url,
+        url: req.body.picture,
         encoding: null
     };
 
     request(options, function (err, response, body) {
         if(!err && response.statusCode == 200){
-            var magigNumberInBody = body.toString('hex',0,4);
+            let magigNumberInBody = body.toString('hex',0,4);
             if (magigNumberInBody == magic.jpg ||
                 magigNumberInBody == magic.png ||
                 magigNumberInBody == magic.gif) {
 
+                let lastElt = images.slice(-1).pop();
+                let index = lastElt ? lastElt.index + 1 : 0;
+
                 images.push({
                     "id": generateUUID(),
-                    "index": images.length,
+                    "index": index,
                     "picture": req.body.picture,
                     "caption": req.body.caption,
                     "latitude": req.body.latitude,
                     "longitude": req.body.longitude,
                     "tags": []
                 });
-                res.status(200).end();
+                return res.status(200).end();
             }
-        } else {
-            res.status(500).end();
         }
+
+        res.status(500).end();
     });
 });
 
