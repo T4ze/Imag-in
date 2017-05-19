@@ -1,0 +1,42 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+  />
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.1/css/bulma.min.css" />
+  <style>
+    .elements {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .element {
+      position: relative;
+    }
+
+    .element:hover::after {
+      position: absolute;
+      content: "\f1f8";
+      font: normal normal normal 14px/1 FontAwesome;
+      font-size: inherit;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+      font-size: 28px;
+      padding: calc(50% - 0.84em);
+      top: 0.42em;
+      left: 0.42em;
+      width: calc(100% - 0.84em);
+      height: calc(100% - 0.84em - 5px);
+      background-color: rgba(229, 57, 53, 0.75);
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="root"></div>
+</body>
+
+</html>
